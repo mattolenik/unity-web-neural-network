@@ -51,6 +51,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(SolutionDir)pathfinding-lib\bin\$(Configuration)\pathfinding-lib.dll" DestinationFolder="$(UnityProjectDir)" />
+    <Copy SourceFiles="$(ProjectDir)bin\$(Configuration)\pathfinding-lib.dll" DestinationFolder="$(UnityProjectDir)" />
   </Target>
 </Project>

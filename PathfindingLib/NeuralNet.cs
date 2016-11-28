@@ -6,14 +6,15 @@ namespace PathfindingLib
 {
     public class NeuralNet
     {
-        int hiddenLayers = 1;
+        int hiddenLayers = 2;
         int bias = -1;
         double activationResponse = 1;
 
         readonly List<NeuronLayer> layers;
 
-        public NeuralNet(int numInputs, int numOutputs, int neuronsPerHiddenLayer)
+        public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int neuronsPerHiddenLayer)
         {
+            hiddenLayers = numHiddenLayers;
             layers = new List<NeuronLayer>();
             if (hiddenLayers > 0)
             {
@@ -45,8 +46,19 @@ namespace PathfindingLib
             return weights;
         }
 
-        public void PutWeights(IEnumerable<double> inputs)
+        public void PutWeights(List<double> inputs)
         {
+            var weight = 0;
+            foreach (var layer in layers)
+            {
+                foreach (var neuron in layer.Neurons)
+                {
+                    for (var i = 0; i < neuron.Weights.Count; i++)
+                    {
+                        neuron.Weights[i] = inputs[weight++];
+                    }
+                }
+            }
         }
 
         public List<double> FeedForward(List<double> inputs)
