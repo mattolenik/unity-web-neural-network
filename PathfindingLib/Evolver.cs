@@ -40,7 +40,7 @@ namespace PathfindingLib
             {
                 if (Random.value < mutationRate)
                 {
-                    genome[i] += Random.Range(-1, 1) * maxPerturbation;
+                    genome[i] += Random.Range(-1f, 1f) * maxPerturbation;
                 }
             }
         }
@@ -50,8 +50,8 @@ namespace PathfindingLib
             // If the ancestors are equivalent, or crossover rate not met, return ancestors as offspring
             if (Random.value > crossoverRate || parent1.SequenceEqual(parent2, fuzzyComparer))
             {
-                offspring1 = parent1;
-                offspring2 = parent2;
+                offspring1 = parent1.ToList();
+                offspring2 = parent2.ToList();
                 return;
             }
 
@@ -149,14 +149,14 @@ namespace PathfindingLib
                 Population.Add(genome);
                 for (var k = 0; k < genomeLength; k++)
                 {
-                    genome.Weights.Add(Random.Range(-1, 1));
+                    genome.Weights.Add(Random.Range(-1f, 1f));
                 }
             }
         }
 
         public List<Genome> Epoch(List<Genome> oldPopulation)
         {
-            Population = oldPopulation;
+            Population = oldPopulation.ToList();
             GenerationCount++;
             Reset();
             Population.Sort((x, y) => x.Fitness.CompareTo(y.Fitness));
@@ -168,7 +168,7 @@ namespace PathfindingLib
             // Must be an even number for roulette sampling to work.
             if (numEliteCopies * numElite % 2 == 0)
             {
-                GrabNBest(numElite, numEliteCopies, newPopulation);
+                //GrabNBest(numElite, numEliteCopies, newPopulation);
             }
 
             while (newPopulation.Count < Population.Count)

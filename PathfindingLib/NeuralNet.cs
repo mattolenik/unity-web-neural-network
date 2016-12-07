@@ -96,12 +96,12 @@ namespace PathfindingLib
 
         public static double Sigmoid(double x)
         {
-            return 1 / (1 + Math.Exp(-x));
+            return 1.0 / (1.0 + Math.Exp(-x));
         }
 
         public static double Tanh(double x)
         {
-            return (1 - Math.Exp(-x)) / (1 + Math.Exp(x));
+            return (1.0 - Math.Exp(2.0 * x)) / (1.0 + Math.Exp(2.0 * x));
         }
     }
 }
