@@ -8,13 +8,13 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PathfindingLib</RootNamespace>
-    <AssemblyName>pathfinding-lib</AssemblyName>
+    <AssemblyName>PathfindingLib</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Unity Web v3.5</TargetFrameworkProfile>
     <!-- Assumes Unity project is in a folder sibling to SolutionDir -->
-    <UnityProjectDir>$(SolutionDir)..\learned-pathfinding\Assets</UnityProjectDir>
-    <UnityAssemblyDir>$(SolutionDir)..\learned-pathfinding\Library\UnityAssemblies</UnityAssemblyDir>
+    <UnityOutputDir>$(SolutionDir)..\SteeringDemo\Assets\Assemblies</UnityOutputDir>
+    <UnityAssemblyDir>$(SolutionDir)..\SteeringDemo\Library\UnityAssemblies</UnityAssemblyDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +48,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(ProjectDir)bin\$(Configuration)\pathfinding-lib.dll" DestinationFolder="$(UnityProjectDir)" />
+    <Copy SourceFiles="$(ProjectDir)bin\$(Configuration)\PathfindingLib.dll" DestinationFolder="$(UnityOutputDir)" />
   </Target>
 </Project>

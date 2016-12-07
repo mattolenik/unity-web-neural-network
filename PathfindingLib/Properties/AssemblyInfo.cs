@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("pathfinding-lib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("PathfindingLib")]
+[assembly: AssemblyDescription("Neural network library used in pathfinding demos")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("pathfinding-lib")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyProduct("PathfindingLib")]
+[assembly: AssemblyCopyright("Copyright © Matthew lenik 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
