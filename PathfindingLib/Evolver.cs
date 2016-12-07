@@ -12,6 +12,8 @@ namespace PathfindingLib
 
         public double BestFitness { get; private set; }
 
+        public int GenerationCount { get; private set; }
+
         int genomeLength;
 
         double totalFitness;
@@ -25,8 +27,6 @@ namespace PathfindingLib
         double crossoverRate = 0.7;
 
         double maxPerturbation = 0.3;
-
-        int generationCount;
 
         int numEliteCopies = 1;
 
@@ -157,6 +157,7 @@ namespace PathfindingLib
         public List<Genome> Epoch(List<Genome> oldPopulation)
         {
             Population = oldPopulation;
+            GenerationCount++;
             Reset();
             Population.Sort((x, y) => x.Fitness.CompareTo(y.Fitness));
             CalculateScores();
@@ -175,9 +176,7 @@ namespace PathfindingLib
                 var parent1 = GetGenomeRoulette();
                 var parent2 = GetGenomeRoulette();
 
-                List<double> offspring1, offspring2;
-
-                Crossover(parent1.Weights, parent2.Weights, out offspring1, out offspring2);
+                Crossover(parent1.Weights, parent2.Weights, out var offspring1, out var offspring2);
 
                 Mutate(ref offspring1);
                 Mutate(ref offspring2);

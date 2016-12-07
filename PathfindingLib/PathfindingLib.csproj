@@ -7,11 +7,11 @@
     <ProjectGuid>{61DA9C2D-1334-44AD-8351-926BADABC379}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>pathfinding_lib</RootNamespace>
+    <RootNamespace>PathfindingLib</RootNamespace>
     <AssemblyName>pathfinding-lib</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Unity Web v3.5</TargetFrameworkProfile>
     <!-- Assumes Unity project is in a folder sibling to SolutionDir -->
     <UnityProjectDir>$(SolutionDir)..\learned-pathfinding\Assets</UnityProjectDir>
     <UnityAssemblyDir>$(SolutionDir)..\learned-pathfinding\Library\UnityAssemblies</UnityAssemblyDir>
@@ -35,10 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="$(UnityAssemblyDir)\UnityEditor.dll" />
     <Reference Include="$(UnityAssemblyDir)\UnityEngine.dll" />
-    <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Evolver.cs" />

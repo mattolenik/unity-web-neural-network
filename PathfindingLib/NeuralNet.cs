@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace PathfindingLib
 {
     public class NeuralNet
     {
-        int hiddenLayers = 2;
-        int bias = -1;
-        double activationResponse = 1;
+        readonly int hiddenLayers;
+        const int Bias = -1;
 
         readonly List<NeuronLayer> layers;
 
@@ -63,6 +63,11 @@ namespace PathfindingLib
 
         public List<double> FeedForward(List<double> inputs)
         {
+            return FeedForward(inputs, Sigmoid);
+        }
+
+        public List<double> FeedForward(List<double> inputs, Func<double, double> activationFunc) 
+        {
             var outputs = new List<double>();
 
             for (var i = 0; i < hiddenLayers + 1; i++)
@@ -82,16 +87,21 @@ namespace PathfindingLib
                     {
                         netinput += neuron.Weights[k] * inputs[k];
                     }
-                    netinput += neuron.Weights[neuron.Weights.Count - 1] * bias;
-                    outputs.Add(Sigmoid(netinput, activationResponse));
+                    netinput += neuron.Weights[neuron.Weights.Count - 1] * Bias;
+                    outputs.Add(activationFunc(netinput));
                 }
             }
             return outputs;
         }
 
-        public double Sigmoid(double netinput, double response)
+        public static double Sigmoid(double x)
         {
-            return 1 / (1 + Math.Exp(-netinput / response));
+            return 1 / (1 + Math.Exp(-x));
+        }
+
+        public static double Tanh(double x)
+        {
+            return (1 - Math.Exp(-x)) / (1 + Math.Exp(x));
         }
     }
 }

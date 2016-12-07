@@ -4,7 +4,7 @@ namespace PathfindingLib
 {
     public class NeuronLayer
     {
-        public List<Neuron> Neurons { get; private set; }
+        public List<Neuron> Neurons { get; }
 
         public NeuronLayer(int numNeurons, int numInputsPerNeuron)
         {
