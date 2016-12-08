@@ -98,10 +98,5 @@ namespace PathfindingLib
         {
             return 1.0 / (1.0 + Math.Exp(-x));
         }
-
-        public static double Tanh(double x)
-        {
-            return (1.0 - Math.Exp(2.0 * x)) / (1.0 + Math.Exp(2.0 * x));
-        }
     }
 }
