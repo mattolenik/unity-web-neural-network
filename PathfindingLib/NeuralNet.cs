@@ -1,33 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace PathfindingLib
 {
     public class NeuralNet
     {
         readonly int hiddenLayers;
-        const int Bias = -1;
+        readonly double bias;
 
         readonly List<NeuronLayer> layers;
 
-        public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int neuronsPerHiddenLayer)
+        public NeuralNet(int inputs, int outputs, int hiddenLayers, int neuronsPerHiddenLayer, double bias)
         {
-            hiddenLayers = numHiddenLayers;
+            this.bias = bias;
+            this.hiddenLayers = hiddenLayers;
             layers = new List<NeuronLayer>();
-            if (hiddenLayers > 0)
+            if (this.hiddenLayers > 0)
             {
-                layers.Add(new NeuronLayer(neuronsPerHiddenLayer, numInputs));
-                for (var i = 0; i < hiddenLayers - 1; i++)
+                layers.Add(new NeuronLayer(neuronsPerHiddenLayer, inputs));
+                for (var i = 0; i < this.hiddenLayers - 1; i++)
                 {
                     layers.Add(new NeuronLayer(neuronsPerHiddenLayer, neuronsPerHiddenLayer));
                 }
-                layers.Add(new NeuronLayer(numOutputs, neuronsPerHiddenLayer));
+                layers.Add(new NeuronLayer(outputs, neuronsPerHiddenLayer));
             }
             else
             {
-                layers.Add(new NeuronLayer(numOutputs, numInputs));
+                layers.Add(new NeuronLayer(outputs, inputs));
             }
         }
 
@@ -87,7 +87,7 @@ namespace PathfindingLib
                     {
                         netinput += neuron.Weights[k] * inputs[k];
                     }
-                    netinput += neuron.Weights[neuron.Weights.Count - 1] * Bias;
+                    netinput += neuron.Weights[neuron.Weights.Count - 1] * bias;
                     outputs.Add(activationFunc(netinput));
                 }
             }

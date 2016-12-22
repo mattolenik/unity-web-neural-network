@@ -168,7 +168,7 @@ namespace PathfindingLib
             // Must be an even number for roulette sampling to work.
             if (numEliteCopies * numElite % 2 == 0)
             {
-                //GrabNBest(numElite, numEliteCopies, newPopulation);
+                GrabNBest(numElite, numEliteCopies, newPopulation);
             }
 
             while (newPopulation.Count < Population.Count)
