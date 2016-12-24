@@ -34,11 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <!-- NuGet not used here because it doesn't understand Unity build targets -->
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="$(UnityAssemblyDir)\UnityEngine.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Evolver.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="FuzzyDoubleComparer.cs" />
     <Compile Include="Genome.cs" />
     <Compile Include="NeuralNet.cs" />
