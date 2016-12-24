@@ -8,9 +8,11 @@ using Newtonsoft.Json.Bson;
 
 namespace PathfindingLib
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Genome : IEquatable<Genome>, IEnumerable<double>
     {
-        readonly List<double> weights;
+        [JsonProperty]
+        List<double> weights;
 
         public double Fitness { get; set; }
 
