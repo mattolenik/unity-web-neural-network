@@ -16,9 +16,9 @@ namespace PathfindingLib
 
         double maxPerturbation = 0.3;
 
-        int numEliteCopies = 1;
+        int numEliteCopies;
 
-        int numElite = 2;
+        int numElite;
 
         readonly Random rnd;
 
@@ -76,11 +76,13 @@ namespace PathfindingLib
             return null;
         }
 
-        public Evolver(int populationSize, double mutationRate, double crossoverRate, int numWeights)
+        public Evolver(int populationSize, double mutationRate, double crossoverRate, int numWeights, int? seed = null, int elitism = 4, int eliteCopies = 2)
         {
             this.mutationRate = mutationRate;
             this.crossoverRate = crossoverRate;
-            rnd = new Random();
+            numElite = elitism;
+            numEliteCopies = eliteCopies;
+            rnd = seed == null ? new Random() : new Random(seed.Value);
             Population = new List<Genome>(populationSize);
             for (var i = 0; i < populationSize; i++)
             {
