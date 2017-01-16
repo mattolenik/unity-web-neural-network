@@ -10,79 +10,20 @@ namespace PathfindingLib
 
         public int GenerationCount { get; private set; }
 
-        readonly double mutationRate;
-
-        readonly double crossoverRate;
-
-        double maxPerturbation = 0.3;
-
-        int numEliteCopies;
-
-        int numElite;
-
+        readonly float mutationRate;
+        readonly float crossoverRate;
+        readonly float maxPerturbation = 0.3f;
+        readonly int numEliteCopies;
+        readonly int numElite;
         readonly Random rnd;
 
-        Genome Mutate(Genome genome)
-        {
-            var weights = new List<double>(genome.WeightCount);
-            for (var i = 0; i < genome.WeightCount; i++)
-            {
-                var weight = genome[i];
-                if (rnd.NextDouble() < mutationRate)
-                {
-                    weight += rnd.NextWeight() * maxPerturbation;
-                }
-                weights.Add(weight);
-            }
-            return new Genome(weights, 0);
-        }
-
-        void Crossover(Genome parent1, Genome parent2, out Genome offspring1, out Genome offspring2)
-        {
-            // If the ancestors are equivalent, or crossover rate not met, return ancestors as offspring
-            if (rnd.NextDouble() > crossoverRate || parent1.Equals(parent2))
-            {
-                offspring1 = new Genome(parent1, 0);
-                offspring2 = new Genome(parent2, 0);
-                return;
-            }
-
-            // For now, parent weight counts are the same
-            var crossoverPoint = rnd.Next(0, parent1.WeightCount - 1);
-
-            var offspring1Genes = parent1.Take(crossoverPoint).Concat(parent2.Skip(crossoverPoint));
-            offspring1 = new Genome(offspring1Genes, 0);
-
-            var offspring2Genes = parent2.Take(crossoverPoint).Concat(parent1.Skip(crossoverPoint));
-            offspring2 = new Genome(offspring2Genes, 0);
-        }
-
-        Genome GetGenomeRoulette(List<Genome> population)
-        {
-            var slice = rnd.NextDouble() * population.Sum(x => x.Fitness);
-
-            var fitnessSoFar = 0.0;
-
-            foreach (var genome in population)
-            {
-                fitnessSoFar += genome.Fitness;
-
-                if (fitnessSoFar >= slice)
-                {
-                    return genome;
-                }
-            }
-
-            return null;
-        }
-
-        public Evolver(int populationSize, double mutationRate, double crossoverRate, int numWeights, int? seed = null, int elitism = 4, int eliteCopies = 2)
+        public Evolver(int populationSize, float mutationRate, float crossoverRate, int numWeights, int elitism = 4, int eliteCopies = 2, Random rnd = null)
         {
             this.mutationRate = mutationRate;
             this.crossoverRate = crossoverRate;
             numElite = elitism;
             numEliteCopies = eliteCopies;
-            rnd = seed == null ? new Random() : new Random(seed.Value);
+            rnd = rnd ?? new Random();
             Population = new List<Genome>(populationSize);
             for (var i = 0; i < populationSize; i++)
             {
@@ -92,14 +33,26 @@ namespace PathfindingLib
             }
         }
 
-        public void NewGeneration()
+        public void NewGeneration(IEnumerable<float> fitnesses)
         {
+            using (var e = fitnesses.GetEnumerator())
+            {
+                foreach (var p in Population)
+                {
+                    e.MoveNext();
+                    p.Fitness = e.Current;
+                }
+            }
             GenerationCount++;
             var sorted = Population.OrderByDescending(x => x.Fitness).ToList();
             var newPopulation = new List<Genome>(Population.Count);
 
             // Add in elitism by adding some copies of the fittest genomes.
             var best = sorted.Take(numElite).ToArray();
+            for (var i = 0; i < numElite; i++)
+            {
+                sorted.RemoveAt(sorted.Count - 1);
+            }
             for (var i = 0; i < numEliteCopies; i++)
             {
                 newPopulation.AddRange(best);
@@ -134,6 +87,60 @@ namespace PathfindingLib
             {
                 Population.Add(genome);
             }
+        }
+
+        Genome Mutate(Genome genome)
+        {
+            var weights = new List<float>(genome.WeightCount);
+            for (var i = 0; i < genome.WeightCount; i++)
+            {
+                var weight = genome[i];
+                if (rnd.NextFloat() < mutationRate)
+                {
+                    weight += rnd.NextWeight() * maxPerturbation;
+                }
+                weights.Add(weight);
+            }
+            return new Genome(weights, 0);
+        }
+
+        void Crossover(Genome parent1, Genome parent2, out Genome offspring1, out Genome offspring2)
+        {
+            // If the ancestors are equivalent, or crossover rate not met, return ancestors as offspring
+            if (rnd.NextFloat() > crossoverRate || parent1.Equals(parent2))
+            {
+                offspring1 = new Genome(parent1, 0);
+                offspring2 = new Genome(parent2, 0);
+                return;
+            }
+
+            // For now, parent weight counts are the same
+            var crossoverPoint = rnd.Next(0, parent1.WeightCount - 1);
+
+            var offspring1Genes = parent1.Take(crossoverPoint).Concat(parent2.Skip(crossoverPoint));
+            offspring1 = new Genome(offspring1Genes, 0);
+
+            var offspring2Genes = parent2.Take(crossoverPoint).Concat(parent1.Skip(crossoverPoint));
+            offspring2 = new Genome(offspring2Genes, 0);
+        }
+
+        Genome GetGenomeRoulette(List<Genome> population)
+        {
+            var slice = rnd.NextFloat() * population.Sum(x => x.Fitness);
+
+            var fitnessSoFar = 0.0;
+
+            foreach (var genome in population)
+            {
+                fitnessSoFar += genome.Fitness;
+
+                if (fitnessSoFar >= slice)
+                {
+                    return genome;
+                }
+            }
+
+            return population.Last();
         }
     }
 }

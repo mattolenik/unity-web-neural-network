@@ -11,9 +11,19 @@ namespace PathfindingLib
         /// <param name="min">minimum value</param>
         /// <param name="max">maximum value</param>
         /// <returns>a value between min and max, inclusive</returns>
-        public static double NextDouble(this Random rnd, double min, double max)
+        public static float NextFloat(this Random rnd, float min, float max)
         {
-            return rnd.NextDouble() * (max - min) + min;
+            return rnd.NextFloat() * (max - min) + min;
+        }
+
+        /// <summary>
+        /// Returns a random float between 0.0 and 1.0
+        /// </summary>
+        /// <param name="rnd">a Random instance</param>
+        /// <returns>a random value between 0.0 and 1.0, inclusive</returns>
+        public static float NextFloat(this Random rnd)
+        {
+            return (float)rnd.NextDouble();
         }
 
         /// <summary>
@@ -21,9 +31,9 @@ namespace PathfindingLib
         /// </summary>
         /// <param name="rnd">a Random instance</param>
         /// <returns>a value between -1.0 and 1.0, inclusive</returns>
-        public static double NextWeight(this Random rnd)
+        public static float NextWeight(this Random rnd)
         {
-            return rnd.NextDouble(-1.0, 1.0);
+            return rnd.NextFloat(-1.0f, 1.0f);
         }
     }
 }

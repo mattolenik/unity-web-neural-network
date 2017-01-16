@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 
 namespace PathfindingLib
 {
     public class Neuron
     {
-        public List<double> Weights { get; }
+        public float[] Weights { get; }
 
-        public Neuron(int numInputs)
+        public Neuron(int numInputs, Random rnd)
         {
-            Weights = new List<double>(numInputs + 1);
-            var rnd = new Random();
+            // +1 for bias weight
+            Weights = new float[numInputs + 1];
             for (var i = 0; i < numInputs + 1; i++)
             {
-                Weights.Add(rnd.NextDouble(-1.0, 1.0));
+                Weights[i] = rnd.NextFloat(-1.0f, 1.0f);
             }
         }
     }

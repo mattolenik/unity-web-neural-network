@@ -9,24 +9,24 @@ using Newtonsoft.Json.Bson;
 namespace PathfindingLib
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class Genome : IEquatable<Genome>, IEnumerable<double>
+    public class Genome : IEquatable<Genome>, IEnumerable<float>
     {
         [JsonProperty]
-        List<double> weights;
+        List<float> weights;
 
-        public double Fitness { get; set; }
+        public float Fitness { get; set; }
 
         public int WeightCount => weights.Count;
 
-        static readonly IEqualityComparer<double> fuzzy = new FuzzyDoubleComparer();
+        static readonly IEqualityComparer<float> Fuzzy = new FuzzyFloatComparer();
 
         public Genome()
         {
             Fitness = 0;
-            weights = new List<double>();
+            weights = new List<float>();
         }
 
-        public Genome(IEnumerable<double> weights, double fitness)
+        public Genome(IEnumerable<float> weights, float fitness)
         {
             this.weights = weights.ToList();
             Fitness = fitness;
@@ -64,7 +64,7 @@ namespace PathfindingLib
             }
         }
 
-        public double this[int key]
+        public float this[int key]
         {
             get { return weights[key]; }
             set { weights[key] = value; }
@@ -72,10 +72,10 @@ namespace PathfindingLib
 
         public bool Equals(Genome other)
         {
-            return other != null && weights.SequenceEqual(other.weights, fuzzy);
+            return other != null && weights.SequenceEqual(other.weights, Fuzzy);
         }
 
-        public IEnumerator<double> GetEnumerator()
+        public IEnumerator<float> GetEnumerator()
         {
             // Yielding out each value instead of returning weights.GetEnumerator()
             // ensures a new list is created, rather than referencing this one.

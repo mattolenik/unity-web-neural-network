@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Evolver.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FuzzyDoubleComparer.cs" />
+    <Compile Include="FuzzyFloatComparer.cs" />
     <Compile Include="Genome.cs" />
     <Compile Include="NeuralNet.cs" />
     <Compile Include="Neuron.cs" />
