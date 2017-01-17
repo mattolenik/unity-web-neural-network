@@ -13,8 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Unity Web v3.5</TargetFrameworkProfile>
     <!-- Assumes Unity project is in a folder sibling to SolutionDir -->
-    <UnityOutputDir>$(SolutionDir)..\SteeringDemo\Assets\Assemblies</UnityOutputDir>
-    <UnityAssemblyDir>$(SolutionDir)..\SteeringDemo\Library\UnityAssemblies</UnityAssemblyDir>
+    <UnityOutputDir>$(SolutionDir)..\AISteering\Assets\Assemblies</UnityOutputDir>
+    <UnityAssemblyDir>$(SolutionDir)..\AISteeringDemo\Library\UnityAssemblies</UnityAssemblyDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
