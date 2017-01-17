@@ -32,6 +32,8 @@ namespace PathfindingLib
             Fitness = fitness;
         }
 
+        public Genome(Genome source) : this(source, source.Fitness) { }
+
         /// <summary>
         /// Import a previously exported genome
         /// </summary>

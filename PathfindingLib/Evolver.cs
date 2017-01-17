@@ -17,13 +17,13 @@ namespace PathfindingLib
         readonly int numElite;
         readonly Random rnd;
 
-        public Evolver(int populationSize, float mutationRate, float crossoverRate, int numWeights, int elitism = 4, int eliteCopies = 2, Random rnd = null)
+        public Evolver(int populationSize, float mutationRate, float crossoverRate, int numWeights, int elitism = 4, int eliteCopies = 2, Random random = null)
         {
             this.mutationRate = mutationRate;
             this.crossoverRate = crossoverRate;
             numElite = elitism;
             numEliteCopies = eliteCopies;
-            rnd = rnd ?? new Random();
+            rnd = random ?? new Random();
             Population = new List<Genome>(populationSize);
             for (var i = 0; i < populationSize; i++)
             {
@@ -49,10 +49,6 @@ namespace PathfindingLib
 
             // Add in elitism by adding some copies of the fittest genomes.
             var best = sorted.Take(numElite).ToArray();
-            for (var i = 0; i < numElite; i++)
-            {
-                sorted.RemoveAt(sorted.Count - 1);
-            }
             for (var i = 0; i < numEliteCopies; i++)
             {
                 newPopulation.AddRange(best);
