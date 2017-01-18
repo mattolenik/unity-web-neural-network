@@ -6,7 +6,7 @@ namespace PathfindingLib
 {
     public class Evolver
     {
-        public List<Genome> Population { get; private set; }
+        public Genome[] Population { get; private set; }
 
         public int GenerationCount { get; private set; }
 
@@ -17,19 +17,35 @@ namespace PathfindingLib
         readonly int numElite;
         readonly Random rnd;
 
-        public Evolver(int populationSize, float mutationRate, float crossoverRate, int numWeights, int elitism = 4, int eliteCopies = 2, Random random = null)
+        public Evolver(
+            int populationSize,
+            float mutationRate,
+            float crossoverRate,
+            int numWeights,
+            Genome[] initialGenes,
+            int elitism = 4,
+            int eliteCopies = 2,
+            Random random = null)
         {
             this.mutationRate = mutationRate;
             this.crossoverRate = crossoverRate;
             numElite = elitism;
             numEliteCopies = eliteCopies;
             rnd = random ?? new Random();
-            Population = new List<Genome>(populationSize);
-            for (var i = 0; i < populationSize; i++)
+            Population = new Genome[populationSize];
+            for (var i = 0; i < initialGenes.Length; i++)
             {
-                var weights = Enumerable.Range(0, numWeights).Select(x => rnd.NextWeight());
-                var genome = new Genome(weights, 0);
-                Population.Add(genome);
+                Population[i] = initialGenes[i];
+                Population[i].Fitness = 0;
+            }
+            for (var i = initialGenes.Length; i < populationSize; i++)
+            {
+                var weights = new float[numWeights];
+                for (var k = 0; k < weights.Length; k++)
+                {
+                    weights[k] = rnd.NextWeight();
+                }
+                Population[i] = new Genome(weights, 0);
             }
         }
 
@@ -44,17 +60,16 @@ namespace PathfindingLib
                 }
             }
             GenerationCount++;
-            var sorted = Population.OrderByDescending(x => x.Fitness).ToList();
-            var newPopulation = new List<Genome>(Population.Count);
+            var best = Population.OrderByDescending(x => x.Fitness).Take(numElite).ToArray();
+            var newPopulation = new List<Genome>(Population.Length);
 
             // Add in elitism by adding some copies of the fittest genomes.
-            var best = sorted.Take(numElite).ToArray();
             for (var i = 0; i < numEliteCopies; i++)
             {
                 newPopulation.AddRange(best);
             }
 
-            while (newPopulation.Count < Population.Count)
+            while (newPopulation.Count < Population.Length)
             {
                 var parent1 = GetGenomeRoulette(Population);
                 var parent2 = GetGenomeRoulette(Population);
@@ -68,26 +83,12 @@ namespace PathfindingLib
                 newPopulation.Add(offspring2);
             }
 
-            Population = newPopulation;
-        }
-
-        /// <summary>
-        /// Import a single genome as the basis for this population
-        /// </summary>
-        /// <param name="genome">the Genome to import</param>
-        public void Import(Genome genome)
-        {
-            var popSize = Population.Count;
-            Population.Clear();
-            for (var i = 0; i < popSize; i++)
-            {
-                Population.Add(genome);
-            }
+            Population = newPopulation.ToArray();
         }
 
         Genome Mutate(Genome genome)
         {
-            var weights = new List<float>(genome.WeightCount);
+            var weights = new float[genome.WeightCount];
             for (var i = 0; i < genome.WeightCount; i++)
             {
                 var weight = genome[i];
@@ -95,7 +96,7 @@ namespace PathfindingLib
                 {
                     weight += rnd.NextWeight() * maxPerturbation;
                 }
-                weights.Add(weight);
+                weights[i] = weight;
             }
             return new Genome(weights, 0);
         }
@@ -113,14 +114,14 @@ namespace PathfindingLib
             // For now, parent weight counts are the same
             var crossoverPoint = rnd.Next(0, parent1.WeightCount - 1);
 
-            var offspring1Genes = parent1.Take(crossoverPoint).Concat(parent2.Skip(crossoverPoint));
+            var offspring1Genes = parent1.Take(crossoverPoint).Concat(parent2.Skip(crossoverPoint)).ToArray();
             offspring1 = new Genome(offspring1Genes, 0);
 
-            var offspring2Genes = parent2.Take(crossoverPoint).Concat(parent1.Skip(crossoverPoint));
+            var offspring2Genes = parent2.Take(crossoverPoint).Concat(parent1.Skip(crossoverPoint)).ToArray();
             offspring2 = new Genome(offspring2Genes, 0);
         }
 
-        Genome GetGenomeRoulette(List<Genome> population)
+        Genome GetGenomeRoulette(Genome[] population)
         {
             var slice = rnd.NextFloat() * population.Sum(x => x.Fitness);
 

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
 
 namespace PathfindingLib
 {
@@ -12,58 +10,18 @@ namespace PathfindingLib
     public class Genome : IEquatable<Genome>, IEnumerable<float>
     {
         [JsonProperty]
-        List<float> weights;
+        float[] weights;
 
         public float Fitness { get; set; }
 
-        public int WeightCount => weights.Count;
+        public int WeightCount => weights.Length;
 
         static readonly IEqualityComparer<float> Fuzzy = new FuzzyFloatComparer();
 
-        public Genome()
+        public Genome(float[] weights, float fitness)
         {
-            Fitness = 0;
-            weights = new List<float>();
-        }
-
-        public Genome(IEnumerable<float> weights, float fitness)
-        {
-            this.weights = weights.ToList();
+            this.weights = weights;
             Fitness = fitness;
-        }
-
-        public Genome(Genome source) : this(source, source.Fitness) { }
-
-        /// <summary>
-        /// Import a previously exported genome
-        /// </summary>
-        /// <param name="data">previously exported genome</param>
-        public static Genome Import(byte[] data)
-        {
-            using (var ms = new MemoryStream(data))
-            using (var reader = new BsonReader(ms))
-            {
-                var serializer = new JsonSerializer();
-                var result = serializer.Deserialize<Genome>(reader);
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// Export genome to BSON
-        /// </summary>
-        /// <returns>BSON byte array</returns>
-        /// <remarks>BSON is more compact that .NET binary serialization</remarks>
-        public byte[] Export()
-        {
-            using (var ms = new MemoryStream())
-            using (var writer = new BsonWriter(ms))
-            {
-                var serializer = new JsonSerializer();
-                serializer.Serialize(writer, this);
-                var data = ms.ToArray();
-                return data;
-            }
         }
 
         public float this[int key]
@@ -79,8 +37,7 @@ namespace PathfindingLib
 
         public IEnumerator<float> GetEnumerator()
         {
-            // Yielding out each value instead of returning weights.GetEnumerator()
-            // ensures a new list is created, rather than referencing this one.
+            // Force a copy of values
             foreach (var weight in weights)
             {
                 yield return weight;
@@ -90,6 +47,12 @@ namespace PathfindingLib
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public static implicit operator float[](Genome g)
+        {
+            // Force a copy
+            return g.weights.ToArray();
         }
     }
 }
