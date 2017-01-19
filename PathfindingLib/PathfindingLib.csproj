@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PathfindingLib</RootNamespace>
     <AssemblyName>PathfindingLib</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Unity Web v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <!-- Assumes Unity project is in a folder sibling to SolutionDir -->
     <UnityOutputDir>$(SolutionDir)..\AISteeringDemo\Assets\Assemblies</UnityOutputDir>
     <UnityAssemblyDir>$(SolutionDir)..\AISteeringDemo\Library\UnityAssemblies</UnityAssemblyDir>
@@ -36,15 +37,12 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- NuGet not used here because it doesn't understand Unity build targets -->
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Evolver.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FuzzyFloatComparer.cs" />
+    <Compile Include="Func.cs" />
     <Compile Include="Genome.cs" />
     <Compile Include="NeuralNet.cs" />
     <Compile Include="Neuron.cs" />
@@ -54,5 +52,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(ProjectDir)bin\$(Configuration)\PathfindingLib.dll" DestinationFolder="$(UnityOutputDir)" />
+    <Copy Condition="'$(Configuration)'=='Debug'" SourceFiles="$(ProjectDir)bin\$(Configuration)\PathfindingLib.pdb" DestinationFolder="$(UnityOutputDir)" />
   </Target>
 </Project>

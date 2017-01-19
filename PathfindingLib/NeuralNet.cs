@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PathfindingLib
 {
@@ -57,7 +56,7 @@ namespace PathfindingLib
             return weights;
         }
 
-        public void PutWeights(List<float> inputs)
+        public void PutWeights(float[] inputs)
         {
             var weight = 0;
             foreach (var layer in layers)
@@ -72,7 +71,7 @@ namespace PathfindingLib
             }
         }
 
-        public void FeedForward(float[] inputs, float[] outputs, Func<float, float> activationFunc)
+        public void FeedForward(float[] inputs, float[] outputs, Func<float, float> activation)
         {
             // Allocations should be kept low in this method (e.g. arrays),
             // while these are probably unneeded but shouldn't hurt.
@@ -98,12 +97,12 @@ namespace PathfindingLib
                     neuron = layers[i].Neurons[j];
                     netinput = 0.0f;
 
-                    for (k = 0; k < neuron.Weights.Length - 1; k++)
+                    for (k = 0; k < neuron.WeightCount; k++)
                     {
                         netinput += neuron.Weights[k] * inputs[k];
                     }
-                    netinput += neuron.Weights[neuron.Weights.Length - 1] * bias;
-                    tempOutputs[j] = activationFunc(netinput);
+                    netinput += neuron.BiasWeight * bias;
+                    tempOutputs[j] = activation(netinput);
                 }
             }
             for (j = 0; j < outputs.Length; j++)

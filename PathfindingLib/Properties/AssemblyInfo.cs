@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PathfindingLib")]
-[assembly: AssemblyDescription("Neural network library used in pathfinding demos")]
+[assembly: AssemblyDescription("Primative neural network library for Unity 3D")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PathfindingLib")]
-[assembly: AssemblyCopyright("Copyright © Matthew lenik 2016")]
+[assembly: AssemblyCopyright("Copyright © Matthew Olenik 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
