@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PathfindingLib
+namespace Rollaround
 {
     public class NeuronLayer
     {

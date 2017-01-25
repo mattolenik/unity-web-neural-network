@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PathfindingLib
+namespace Rollaround
 {
     static class Extensions
     {

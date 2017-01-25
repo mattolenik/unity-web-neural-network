@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PathfindingLib")]
+[assembly: AssemblyTitle("Rollaround")]
 [assembly: AssemblyDescription("Primative neural network library for Unity 3D")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PathfindingLib")]
+[assembly: AssemblyProduct("Rollaround")]
 [assembly: AssemblyCopyright("Copyright © Matthew Olenik 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

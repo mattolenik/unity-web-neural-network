@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.25920.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathfindingLib", "PathfindingLib\PathfindingLib.csproj", "{61DA9C2D-1334-44AD-8351-926BADABC379}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rollaround", "Rollaround\Rollaround.csproj", "{61DA9C2D-1334-44AD-8351-926BADABC379}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

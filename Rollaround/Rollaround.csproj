@@ -7,8 +7,8 @@
     <ProjectGuid>{61DA9C2D-1334-44AD-8351-926BADABC379}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PathfindingLib</RootNamespace>
-    <AssemblyName>PathfindingLib</AssemblyName>
+    <RootNamespace>Rollaround</RootNamespace>
+    <AssemblyName>Rollaround</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
@@ -51,7 +51,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(ProjectDir)bin\$(Configuration)\PathfindingLib.dll" DestinationFolder="$(UnityOutputDir)" />
-    <Copy Condition="'$(Configuration)'=='Debug'" SourceFiles="$(ProjectDir)bin\$(Configuration)\PathfindingLib.pdb" DestinationFolder="$(UnityOutputDir)" />
+    <Copy SourceFiles="$(ProjectDir)bin\$(Configuration)\Rollaround.dll" DestinationFolder="$(UnityOutputDir)" />
+    <Copy Condition="'$(Configuration)'=='Debug'" SourceFiles="$(ProjectDir)bin\$(Configuration)\Rollaround.pdb" DestinationFolder="$(UnityOutputDir)" />
   </Target>
 </Project>
