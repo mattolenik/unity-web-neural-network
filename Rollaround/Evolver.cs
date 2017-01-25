@@ -44,9 +44,11 @@ namespace Rollaround
         public void NewGeneration(float[] fitnesses)
         {
             GenerationCount++;
+            var i = 0;
+            var k = 0;
 
             // Assign fitness values to genomes
-            for (var i = 0; i < fitnesses.Length; i++)
+            for (i = 0; i < fitnesses.Length; i++)
             {
                 Population[i].Fitness = fitnesses[i];
             }
@@ -56,11 +58,24 @@ namespace Rollaround
             // Add in elitism by adding copies of the fittest genomes.
             var best = FindBest(numElite);
 
+            // Remove lowest performers
+            var numCulled = 0;
+            while (i++ < Population.Length &&
+                   k++ < best.Length &&
+                   numCulled < numEliteCopies * best.Length)
+            {
+                if(Population[i].Fitness < 1)
+                {
+                    Population[i] = best[i];
+                    numCulled++;
+                }
+            }
+
             // Fill numEliteCopies * best.Length instances
             var index = 0;
-            for (var i = 0; i < numEliteCopies; i++)
+            for (i = 0; i < numEliteCopies; i++)
             {
-                for (var k = 0; k < best.Length; k++)
+                for (k = 0; k < best.Length; k++)
                 {
                     var x = i * best.Length + k;
                     newPopulation[x] = best[k];
