@@ -8,7 +8,7 @@ namespace Rollaround
         readonly int numHiddenLayers;
         readonly float bias;
 
-        readonly List<NeuronLayer> layers;
+        readonly NeuronLayer[] layers;
         readonly float[] tempInputs;
         readonly float[] tempOutputs;
         readonly int numOutputs;
@@ -19,7 +19,6 @@ namespace Rollaround
             this.bias = bias;
             this.numHiddenLayers = numHiddenLayers;
             this.numOutputs = numOutputs;
-            layers = new List<NeuronLayer>();
 
             // These lists will get reused during feed forward, set capacity
             // to highest that will be needed
@@ -28,16 +27,19 @@ namespace Rollaround
 
             if (this.numHiddenLayers > 0)
             {
-                layers.Add(new NeuronLayer(neuronsPerHiddenLayer, numInputs, rnd));
-                for (var i = 0; i < this.numHiddenLayers - 1; i++)
+                var numLayers = numHiddenLayers + 2;
+                layers = new NeuronLayer[numLayers];
+                layers[0] = new NeuronLayer(neuronsPerHiddenLayer, numInputs, rnd);
+                for (var i = 1; i < this.numHiddenLayers - 1; i++)
                 {
-                    layers.Add(new NeuronLayer(neuronsPerHiddenLayer, neuronsPerHiddenLayer, rnd));
+                    layers[i] = new NeuronLayer(neuronsPerHiddenLayer, neuronsPerHiddenLayer, rnd);
                 }
-                layers.Add(new NeuronLayer(numOutputs, neuronsPerHiddenLayer, rnd));
+                layers[layers.Length - 1] = new NeuronLayer(numOutputs, neuronsPerHiddenLayer, rnd);
             }
             else
             {
-                layers.Add(new NeuronLayer(numOutputs, numInputs, rnd));
+                layers = new NeuronLayer[1];
+                layers[0] = new NeuronLayer(numOutputs, numInputs, rnd);
             }
         }
 
@@ -92,7 +94,7 @@ namespace Rollaround
                 }
 
                 // Compute outputs for this layer
-                for (j = 0; j < layers[i].Neurons.Count; j++)
+                for (j = 0; j < layers[i].Neurons.Length; j++)
                 {
                     neuron = layers[i].Neurons[j];
                     netinput = 0.0f;

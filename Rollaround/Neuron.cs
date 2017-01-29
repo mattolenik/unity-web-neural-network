@@ -2,9 +2,9 @@
 
 namespace Rollaround
 {
-    public class Neuron
+    public struct Neuron
     {
-        public float[] Weights { get; }
+        public float[] Weights;
 
         public int WeightCount => Weights.Length - 1;
 

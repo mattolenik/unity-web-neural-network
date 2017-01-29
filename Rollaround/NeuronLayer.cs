@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
 
 namespace Rollaround
 {
-    public class NeuronLayer
+    public struct NeuronLayer
     {
-        public List<Neuron> Neurons { get; }
+        public Neuron[] Neurons;
 
         public NeuronLayer(int numNeurons, int numInputsPerNeuron, Random rnd)
         {
-            Neurons = new List<Neuron>(numNeurons);
+            Neurons = new Neuron[numNeurons];
             for (var i = 0; i < numNeurons; i++)
             {
-                Neurons.Add(new Neuron(numInputsPerNeuron, rnd));
+                Neurons[i] = new Neuron(numInputsPerNeuron, rnd);
             }
         }
     }

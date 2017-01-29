@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Rollaround
 {
@@ -43,6 +42,10 @@ namespace Rollaround
 
         public void NewGeneration(float[] fitnesses)
         {
+            if (fitnesses.Length != Population.Length)
+            {
+                throw new ArgumentOutOfRangeException("fitnesses", "Fitness array must be same length as population");
+            }
             GenerationCount++;
             var i = 0;
             var k = 0;
@@ -66,7 +69,7 @@ namespace Rollaround
             {
                 if(Population[i].Fitness < 1)
                 {
-                    Population[i] = best[i];
+                    Population[i] = Population[best[i]];
                     numCulled++;
                 }
             }
@@ -78,20 +81,20 @@ namespace Rollaround
                 for (k = 0; k < best.Length; k++)
                 {
                     var x = i * best.Length + k;
-                    newPopulation[x] = best[k];
+                    newPopulation[x] = Population[best[k]];
                     index++;
                 }
             }
             // Continue with previous index until full
             while (index < Population.Length)
             {
-                var parent1 = GetGenomeRoulette(Population);
-                var parent2 = GetGenomeRoulette(Population);
+                var parent1 = GetRouletteIndex(Population);
+                var parent2 = GetRouletteIndex(Population);
 
                 Crossover(parent1, parent2, out var offspring1, out var offspring2);
 
-                offspring1 = Mutate(offspring1);
-                offspring2 = Mutate(offspring2);
+                Mutate(ref offspring1);
+                Mutate(ref offspring2);
 
                 newPopulation[index++] = offspring1;
                 newPopulation[index++] = offspring2;
@@ -100,9 +103,15 @@ namespace Rollaround
             Population = newPopulation;
         }
         
-        Genome[] FindBest(int topN)
+        /// <summary>
+        /// Finds the best n performers in Population
+        /// </summary>
+        /// <param name="topN">number of top performers</param>
+        /// <returns>an array of indexes for Population</returns>
+        int[] FindBest(int topN)
         {
-            var best = new Genome[topN];
+            var best = new int[topN];
+            var bestFitnesses = new float[topN];
             var picked = new bool[Population.Length];
             for (var i = 0; i < best.Length; i++)
             {
@@ -112,9 +121,10 @@ namespace Rollaround
                 var id = 0;
                 for (var k = 0; k < Population.Length; k++)
                 {
-                    if (!picked[k] && (best[i] == null || Population[k].Fitness > best[i].Fitness))
+                    if (!picked[k] && Population[k].Fitness > bestFitnesses[i])
                     {
-                        best[i] = Population[k];
+                        best[i] = k;
+                        bestFitnesses[i] = Population[k].Fitness;
                         // Track the last index k
                         id = k;
                     }
@@ -124,54 +134,68 @@ namespace Rollaround
             return best;
         }
 
-        Genome Mutate(Genome genome)
+        void Mutate(ref Genome genome)
         {
-            var weights = new float[genome.WeightCount];
             for (var i = 0; i < genome.WeightCount; i++)
             {
-                var weight = genome[i];
                 if (rnd.NextFloat() < mutationRate)
                 {
-                    weight += rnd.NextWeight() * maxPerturbation;
+                    genome[i] += rnd.NextWeight() * maxPerturbation;
                 }
-                weights[i] = weight;
             }
-            return new Genome(weights, 0);
         }
 
-        void Crossover(Genome parent1, Genome parent2, out Genome offspring1, out Genome offspring2)
+        /// <summary>
+        /// Populates two new offspring from parents
+        /// </summary>
+        /// <param name="parent1">Population array index of parent1</param>
+        /// <param name="parent2">Population array index of parent2</param>
+        /// <param name="offspring1">new child offspring</param>
+        /// <param name="offspring2">new child offspring</param>
+        void Crossover(int parent1, int parent2, out Genome offspring1, out Genome offspring2)
         {
             // If the ancestors are equivalent, or crossover rate not met, return ancestors as offspring
             if (rnd.NextFloat() > crossoverRate || ReferenceEquals(parent1, parent2))
             {
-                offspring1 = new Genome(parent1.Weights, 0);
-                offspring2 = new Genome(parent2.Weights, 0);
+                offspring1 = Population[parent1];
+                offspring2 = Population[parent2];
                 return;
             }
 
-            // For now, parent weight counts are the same
-            var crossoverPoint = rnd.Next(0, parent1.WeightCount - 1);
+            var wc = Population[parent1].WeightCount;
+            if(wc != Population[parent2].WeightCount)
+            {
+                throw new ArgumentOutOfRangeException("parent2", "Parent genomes are expected to be of same length");
+            }
 
-            var offspring1Genes = new float[parent1.WeightCount];
-            var offspring2Genes = new float[parent2.WeightCount];
+            // For now, parent weight counts are the same
+            var crossoverPoint = rnd.Next(0, wc - 1);
+
+            var offspring1Genes = new float[wc];
+            var offspring2Genes = new float[wc];
+            offspring1 = new Genome(wc);
+            offspring2 = new Genome(wc);
 
             for (var i = 0; i < crossoverPoint; i++)
             {
 
-                offspring1Genes[i] = parent1[i];
-                offspring2Genes[i] = parent2[i];
+                offspring1[i] = Population[parent1][i];
+                offspring2[i] = Population[parent2][i];
             }
 
-            for (var i = crossoverPoint; i < parent1.WeightCount; i++)
+            for (var i = crossoverPoint; i < wc; i++)
             {
-                offspring1Genes[i] = parent2[i];
-                offspring2Genes[i] = parent1[i];
+                offspring1[i] = Population[parent2][i];
+                offspring2[i] = Population[parent1][i];
             }
-            offspring1 = new Genome(offspring1Genes, 0);
-            offspring2 = new Genome(offspring2Genes, 0);
         }
 
-        Genome GetGenomeRoulette(Genome[] population)
+        /// <summary>
+        /// Returns an array index for selected Genome in population
+        /// </summary>
+        /// <param name="population">Population to sample</param>
+        /// <returns>Array index for selected genome</returns>
+        int GetRouletteIndex(Genome[] population)
         {
             var sum = 0f;
             for (var i = 0; i < population.Length; i++)
@@ -182,17 +206,17 @@ namespace Rollaround
 
             var fitnessSoFar = 0.0;
 
-            foreach (var genome in population)
+            for(var i = 0; i < Population.Length; i++)
             {
-                fitnessSoFar += genome.Fitness;
+                fitnessSoFar += Population[i].Fitness;
 
                 if (fitnessSoFar >= slice)
                 {
-                    return genome;
+                    return i;
                 }
             }
 
-            return population[population.Length - 1];
+            return population.Length - 1;
         }
     }
 }
