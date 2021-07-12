@@ -1,6 +1,6 @@
 # About
 
-Rollaround is a .NET library implementing a simple multi-layer feed forward neural network with supervised learning.
+`unity-web-neural-network` is a .NET library implementing a simple multi-layer feed forward neural network with supervised learning.
 
 It's currently just an ad-hoc library for an [AI demo project](https://github.com/mattolenik/AISteeringDemo), and is geared towards use within Unity 3D. Particularly for the WebGL target, which ultimately converts the IL to JavaScript. It uses very few allocations, bare arrays instead of lists, loops instead of iterators, no LINQ, and targets only the .NET 2.0 framework.
 
@@ -11,8 +11,6 @@ I would consider this pre-alpha. It works, but has no tests, probably has edge c
 An AI steering and obstacle avoidance demo using this library.
 
 [![AI obstacle avoidance demo](http://i.imgur.com/5dX7v3L.gif)](https://youtu.be/Ffkjfok1HTY)
-
-The rolling movement of the droids is the inspiration for the project's name.
 
 ## Roadmap
 
